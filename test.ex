@@ -48,32 +48,71 @@ defmodule Test do
         hd l    
     end
     def nth(n, l) do
-        [head|tail] = l 
+        [_head|tail] = l 
         nth(n-1, tail) 
     end
 
+    def len([]) do 0 end 
     def len(l) do
-        lenvar(0, l)
-    end 
-    def lenvar(n,[]) do n end  
-    def lenvar(n, l) do 
-        [head|tail] = l 
-        lenvar(n+1, tail)
-    end 
+        [_head|tail] = l 
+        len(tail) + 1
+    end
 
+    def sum([]) do 0 end
     def sum(l) do
-        sumvar(0, l)       
-    end 
-    def sumvar(s, []) do s end
-    def sumvar(s, l) do
         [head|tail] = l
-        sumvar(s+head, tail)
+        sum(tail) + head
+    end 
+  
+    def duplicate([]) do [] end 
+    def duplicate(l) do 
+        [head|tail] = l
+        [head, head | duplicate(tail)]
     end
+
+    def add(x, []) do [x] end
+    def add(x, [x|tail]) do
+        [x|tail]
+    end
+    def add(x, [head|tail]) do
+        [head|add(x, tail)]
+    end
+
+    def remove(_, []) do [] end
+    def remove(x, [x|tail]) do 
+        remove(x, tail)
+    end 
+    def remove(x, [head|tail]) do
+        [head|remove(x, tail)]
+    end
+
+    def unique([]) do [] end
+    def unique(l) do 
+        [head|tail] = l 
+        add(head, unique(tail))
+    end
+
+    def pack([]) do [] end
+    def pack([head|tail]) do 
+        packinsert(head,pack(tail))
+    end 
     
-    def duplicate(l) do
-        duplicatelist(l, copy)
+    def packinsert(element, []) do 
+         [[element]]
+    end 
+    def packinsert(element, [[element|t]|tail]) do 
+        [[element, element|t]|tail]    
     end
-    def duplicatelist(l, copy) do
-        
-    end
+    def packinsert(element, [head|tail]) do 
+        [head|packinsert(element,tail)]
+    end  
+    
 end
+
+# IO.puts inspect(Test.sum([1, 3, 5]))
+# IO.puts inspect(Test.len([1, 3, 5]))
+# IO.puts inspect(Test.duplicate([1, 3, 5]))
+# IO.puts inspect(Test.add(5, [1, 3, 5]))
+# IO.puts inspect(Test.remove(5, [1, 3, 5]))
+# IO.puts inspect(Test.unique([5, 1, 3, 5]))
+IO.puts inspect(Test.pack([:a,:b,:b,:a,:c,:c]))
