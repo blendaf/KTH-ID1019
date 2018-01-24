@@ -1,5 +1,0 @@
-defmodule Test do 
-    def double(n) do
-        :
-    end
-end
