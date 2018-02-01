@@ -87,8 +87,7 @@ defmodule Test do
     end
 
     def unique([]) do [] end
-    def unique(l) do 
-        [head|tail] = l 
+    def unique([head|tail]) do 
         add(head, unique(tail))
     end
 
