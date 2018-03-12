@@ -1,7 +1,7 @@
 defmodule MergeSort do
 
     
-    def split([], left, right), do: {left, right}
+    def split([], left, right), do {left, right} end
     def split([head|tail], left, right) do
         split(tail, [head|right], left)
     end 

@@ -31,7 +31,7 @@ defmodule Eager do
         {:ok, ...}
     end 
 
-    def eval_match({:atm, id}, ..., ...) do 
+    def eval_match({:atm, id}, compare, env) do 
         {:ok, ...}
     end 
 end
