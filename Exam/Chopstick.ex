@@ -7,7 +7,7 @@ defmodule Chopstick do
     def available() do
         receive do
             {:request, from} ->
-                send(from, :granted)
+                send(from, {:granted, self()})
                 gone()
             :quit -> :ok
         end
@@ -21,14 +21,22 @@ defmodule Chopstick do
     end
 
 
-    def request(stick1, stick2 timeout) do
-        send(stick, {:request, self()})
-        receive do
-            :granted -> :ok
-        after timeout ->
-            :no
-        end
+    def request(left, right, timeout) do
+        send(left, {:request, self()})
+        send(right, {:request, self()})
+        wait(left, right, timeout)
     end
+
+    def wait(true, true, _) do 
+        :ok
+    end 
+    def wait(left, right, timeout) do 
+        receive do
+            {:granted, left} -> wait(true, right, timeout)
+            {:granted, right} -> wait(left, true, timeout)
+            after timeout -> :no
+        end
+    end 
 
     def terminate(stick) do 
         send(stick, :quit)
@@ -52,9 +60,7 @@ defmodule Philosopher do
     end 
     def dreaming(hunger, right, left, name, ctr, timeout) do 
         sleep(500)
-        Chopstick.request(left, timeout)
-        sleep(8000)
-        Chopstick.request(right, timeout)
+        Chopstick.request(left, right, timeout)
         IO.puts("#{name} received chopsticks!")
         eating(hunger, right, left, name, ctr, timeout)
     end 
